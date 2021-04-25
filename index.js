@@ -2,23 +2,19 @@ const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
+require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 
 require('./database/Connection');
-//Send index html file
-app.get('/', (req, res) => {
-	res.status(200).sendFile(__dirname + '/public/index.html');
-});
-
-app.get('/traffic-control', (req, res) => {
-	res.status(200).sendFile(__dirname + '/public/trafficLights.html');
-});
-
-//allow to use every file in public folder
-app.use(express.static(__dirname + '/public'));
-
+//JSON MIDDLEWARE
 app.use(express.json());
-app.use(require('./api/routes/VehicleRoutes'));
+
+//JWT JsonWebToken
+app.set('secretKey', process.env.TOKEN_KEY || 'nodeRestApi'); // jwt secret token
+
+//API ROUTES
+app.use('/api', require('./api/routes/VehicleRoutes'));
+app.use('/api', require('./api/routes/UserRoutes'));
 
 //connection event
 io.on('connection', (socket) => {
