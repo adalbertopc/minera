@@ -9,6 +9,9 @@ require('./database/Connection');
 //JSON MIDDLEWARE
 app.use(express.json());
 
+//JWT JsonWebToken
+app.set('secretKey', process.env.TOKEN_KEY || 'nodeRestApi'); // jwt secret token
+
 //API ROUTES
 app.use('/api', require('./api/routes/VehicleRoutes'));
 app.use('/api', require('./api/routes/UserRoutes'));
