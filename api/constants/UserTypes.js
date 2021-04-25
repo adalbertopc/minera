@@ -1,6 +1,0 @@
-export default UserTypes = {
-	ADMIN: 'ADMIN',
-	MANAGER: 'MANAGER',
-	LIGHTS_CONTROLLER: 'LIGHTS_CONTROLLER',
-	DRIVER: 'DRIVER',
-};
