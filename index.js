@@ -15,6 +15,7 @@ app.set('secretKey', process.env.TOKEN_KEY || 'nodeRestApi'); // jwt secret toke
 //API ROUTES
 app.use('/api', require('./api/routes/VehicleRoutes'));
 app.use('/api', require('./api/routes/UserRoutes'));
+app.use('/api', require('./api/routes/TrafficCongestionRoutes'));
 
 //connection event
 io.on('connection', (socket) => {
