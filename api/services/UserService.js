@@ -8,6 +8,7 @@ class UserService extends Service {
 
 	authenticate = async (req, res, next) => {
 		const user = await this.model.findOne({ username: req.body.username });
+		const { _id, username, password, firstName } = user;
 		if (!user || user === null) {
 			return {
 				error: true,
@@ -17,15 +18,15 @@ class UserService extends Service {
 				statusCode: 500,
 			};
 		} else {
-			if (bcrypt.compareSync(req.body.password, user.password)) {
-				const token = jwt.sign({ id: user._id }, req.app.get('secretKey'), {
+			if (bcrypt.compareSync(req.body.password, password)) {
+				const token = jwt.sign({ id: _id }, req.app.get('secretKey'), {
 					expiresIn: '1h',
 				});
 				return {
 					error: false,
 					status: 'success',
 					message: 'user found!!!',
-					data: { user, token: token },
+					data: { user: { username, firstName }, token: token },
 				};
 			} else {
 				return {
