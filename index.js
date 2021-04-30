@@ -2,13 +2,15 @@ const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
+const cors = require('cors');
+
 require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 
 require('./database/Connection');
 //JSON MIDDLEWARE
 app.use(express.json());
-
+app.use(cors());
 //JWT JsonWebToken
 app.set('secretKey', process.env.TOKEN_KEY || 'nodeRestApi'); // jwt secret token
 
