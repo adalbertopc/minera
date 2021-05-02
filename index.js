@@ -3,6 +3,7 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const cors = require('cors');
+const Sockets = require('./sockets/models/sockets');
 
 require('dotenv').config();
 const PORT = process.env.PORT || 3000;
@@ -19,17 +20,7 @@ app.use('/api', require('./api/routes/VehicleRoutes'));
 app.use('/api', require('./api/routes/UserRoutes'));
 app.use('/api', require('./api/routes/TrafficCongestionRoutes'));
 
-//connection event
-io.on('connection', (socket) => {
-	console.log('connected', socket.id);
-	socket.on('move-car-forward', (args) => {
-		io.emit('car-movement-history', args);
-	});
-
-	socket.on('change-traffic-light', ({ id, state }) => {
-		io.emit('update-traffic-lights', { id, state: !state });
-	});
-});
+new Sockets(io);
 
 //turn on server
 server.listen(PORT, () => {
