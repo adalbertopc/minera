@@ -7,5 +7,14 @@ const verifyToken = require('../middlewares/verifyToken');
 router.get('/user', verifyToken, UserController.getAll);
 router.post('/user', passwordEncrypt, UserController.insert);
 router.post('/user/auth', UserController.authenticate);
+router.get('/user/auth', verifyToken, (req, res) => {
+	res.json({
+		success: true,
+		message: 'Token is valid',
+		username: req.user.username,
+		firstName: req.user.firstName,
+		userType: req.user.userType,
+	});
+});
 
 module.exports = router;
