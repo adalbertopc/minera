@@ -13,6 +13,7 @@ router.get('/user/auth', verifyToken, (req, res) => {
 		message: 'Token is valid',
 		username: req.user.username,
 		firstName: req.user.firstName,
+		userType: req.user.userType,
 	});
 });
 

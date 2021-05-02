@@ -18,16 +18,20 @@ class UserService extends Service {
 			};
 		}
 		//
-		const { _id, username, password, firstName } = user;
+		const { _id, username, password, firstName, userType } = user;
 		if (bcrypt.compareSync(req.body.password, password)) {
-			const token = jwt.sign({ id: _id, username, firstName }, req.app.get('secretKey'), {
-				expiresIn: '1h',
-			});
+			const token = jwt.sign(
+				{ id: _id, username, firstName, userType },
+				req.app.get('secretKey'),
+				{
+					expiresIn: '1h',
+				}
+			);
 			return {
 				error: false,
 				status: 'success',
 				message: 'user found!!!',
-				data: { user: { username, firstName }, token: token },
+				data: { user: { username, firstName, userType }, token: token },
 				statusCode: 200,
 			};
 		} else {
