@@ -8,34 +8,36 @@ class UserService extends Service {
 
 	authenticate = async (req, res, next) => {
 		const user = await this.model.findOne({ username: req.body.username });
-		const { _id, username, password, firstName } = user;
 		if (!user || user === null) {
 			return {
 				error: true,
 				status: 'error',
 				message: 'User dont found ',
 				data: null,
-				statusCode: 500,
+				statusCode: 502,
+			};
+		}
+		//
+		const { _id, username, password, firstName } = user;
+		if (bcrypt.compareSync(req.body.password, password)) {
+			const token = jwt.sign({ id: _id, username, firstName }, req.app.get('secretKey'), {
+				expiresIn: '1h',
+			});
+			return {
+				error: false,
+				status: 'success',
+				message: 'user found!!!',
+				data: { user: { username, firstName }, token: token },
+				statusCode: 200,
 			};
 		} else {
-			if (bcrypt.compareSync(req.body.password, password)) {
-				const token = jwt.sign({ id: _id }, req.app.get('secretKey'), {
-					expiresIn: '1h',
-				});
-				return {
-					error: false,
-					status: 'success',
-					message: 'user found!!!',
-					data: { user: { username, firstName }, token: token },
-				};
-			} else {
-				return {
-					error: true,
-					status: 'error',
-					message: 'Invalid email/password!!!',
-					data: null,
-				};
-			}
+			return {
+				error: true,
+				status: 'error',
+				message: 'Invalid email/password!!!',
+				data: null,
+				statusCode: 500,
+			};
 		}
 	};
 }
