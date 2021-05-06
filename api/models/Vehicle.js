@@ -9,19 +9,11 @@ class Vehicle {
 			type: {
 				type: 'String',
 			},
-			content: {
-				type: ['Mixed'],
-			},
-			coords: {
-				x: {
-					type: 'Number',
-				},
-				y: {
-					type: 'Number',
-				},
-			},
-			isCompleted: {
-				type: 'Boolean',
+			content: { type: 'String' },
+			lng: { type: 'Number' },
+			lat: { type: 'Number' },
+			dateStart: {
+				type: 'Date',
 			},
 		});
 		mongoose.model('Vehicle', schema);
